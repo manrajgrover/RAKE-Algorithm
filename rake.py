@@ -50,6 +50,15 @@ def wordscore(phrases):
         score[w]=round(Decimal(w_deg[w]),2)/round(Decimal(p[0][w]),2)
     return score
 
+def phrasescore(phrases,score):
+    phrasescores = {}
+    for phrase in phrases:
+        phrasescore = 0
+        for w in phrase:
+            phrasescore += score[w]
+        phrasescores[" ".join(phrase)] = phrasescore
+    return phrasescores
+
 text="""Compatibility of systems of linear constraints over the set of natural numbers. Criteria of compatibility of a system of linear Diophantine equations, strict inequations, and nonstrict inequations are considered. Upper bounds for components of a minimal set of solutions and algorithms of construction of minimal generating sets of solutions for all types of systems are given. These criteria and the corresponding algorithms for constructing a minimal supporting set of solutions can be used in solving all the considered types of systems and systems of mixed types."""
 
 stopwords=open("stopwords.txt","r")
@@ -58,3 +67,7 @@ stopword_list=stopwords.split()
 sentences=nltk.sent_tokenize(text)
 phrases = get_phrases(sentences)
 sc=wordscore(phrases)
+phrasescore=phrasescore(phrases,sc)
+sortedscore=sorted(phrasescore.iteritems(), key=operator.itemgetter(1),reverse=True)
+for w in sortedscore:
+    print w
